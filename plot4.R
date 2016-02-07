@@ -1,0 +1,21 @@
+library(dplyr)
+dataFile <- "./household_power_consumption.txt"
+data <- read.table(dataFile, header=TRUE, sep=";", stringsAsFactors=FALSE, dec=".")
+data.f <- filter(data, Date == "1/2/2007" | Date == "2/2/2007")
+datesTimes <- strptime(paste(data.f$Date, data.f$Time, sep = " "), "%d/%m/%Y %H:%M:%S") ## read in date/time info in format 'd/m/y h:m:s'
+globalActivePower <- as.numeric(subSetData$Global_active_power)
+globalReactivePower <- as.numeric(subSetData$Global_reactive_power)
+voltage <- as.numeric(subSetData$Voltage)
+subMetering1 <- as.numeric(subSetData$Sub_metering_1)
+subMetering2 <- as.numeric(subSetData$Sub_metering_2)
+subMetering3 <- as.numeric(subSetData$Sub_metering_3)
+png("plot4.png", width=480, height=480)
+par(mfrow = c(2, 2)) 
+plot(datesTimes, globalActivePower, type="l", xlab="", ylab="Global Active Power", cex=0.2)
+plot(datesTimes, voltage, type="l", xlab="datesTimes", ylab="Voltage")
+plot(datesTimes, subMetering1, type="l", ylab="Energy Submetering", xlab="")
+lines(datesTimes, subMetering2, type="l", col="red")
+lines(datesTimes, subMetering3, type="l", col="blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=, lwd=2.5, col=c("black", "red", "blue"), bty="o")
+plot(datesTimes, globalReactivePower, type="l", xlab="datesTimes", ylab="Global_reactive_power")
+dev.off() ## close PNG device
